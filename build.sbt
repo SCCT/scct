@@ -2,7 +2,7 @@ organization := "com.sqality.scct"
 
 name := "scct"
 
-version := "0.2.1"
+version := "0.3-SNAPSHOT"
 
 scalaVersion := "2.9.2"
 
