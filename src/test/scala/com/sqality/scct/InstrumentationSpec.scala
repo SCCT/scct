@@ -31,7 +31,7 @@ trait InstrumentationSpec extends Specification with InstrumentationSupport {
 }
 
 trait InstrumentationSupport {
-  def scalaVersion = System.getProperty("scct-test-scala-version", "2.10.0-RC3")
+  def scalaVersion = System.getProperty("scct-test-scala-version", "2.10.3")
   def debug = false
 
   def compileFile(file: String) = compileFiles(Seq(file): _*)
@@ -79,15 +79,14 @@ trait InstrumentationSupport {
   }
 
   def locateScalaJars() = {
-    val userHome = System.getProperty("user.home")
-    val ivyCompilerJar = s"$userHome/.ivy2/cache/org.scala-lang/scala-compiler/jars/scala-compiler-$scalaVersion.jar"
-    val ivyLibraryJar = s"$userHome/.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-$scalaVersion.jar"
+    List(jarPathOfClass("scala.Some"), jarPathOfClass("scala.tools.nsc.Interpreter"))
+  }
 
-    if (new File(ivyCompilerJar).exists && new File(ivyLibraryJar).exists) {
-      List(ivyCompilerJar, ivyLibraryJar)
-    } else {
-      throw new FileNotFoundException("scala jars not found. Check InstrumentationSpec:locateScalaJars")
-    }
+  def jarPathOfClass(className: String) = {
+    val resource = className.split('.').mkString("/", "/", ".class")
+    val path = getClass.getResource(resource).getPath
+    val indexOfSeparator = path.lastIndexOf('!')
+    path.substring(0, indexOfSeparator).replace("file:", "")
   }
 
   def compile(line: String): PluginRunner = {

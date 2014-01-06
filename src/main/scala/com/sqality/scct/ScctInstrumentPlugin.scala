@@ -4,8 +4,9 @@ import tools.nsc.plugins.{ PluginComponent, Plugin }
 import java.io.File
 import tools.nsc.transform.{ Transform, TypingTransformers }
 import tools.nsc.symtab.Flags
-import tools.nsc.{ Phase, Global }
+import tools.nsc.Global
 import util.Random
+import scala.util.matching.Regex
 
 class ScctInstrumentPlugin(val global: Global) extends Plugin {
   val name = "scct"
@@ -19,18 +20,27 @@ class ScctInstrumentPlugin(val global: Global) extends Plugin {
         options.projectId = opt.substring("projectId:".length)
       } else if (opt.startsWith("basedir:")) {
         options.baseDir = new File(opt.substring("basedir:".length))
+      } else if (opt.startsWith("excludePackages:")) {
+        options.excludeClasses = opt.substring("excludePackages:".length).split(",").filter(_.length > 0).map(_.r)
+      } else if (opt.startsWith("excludeFiles:")) {
+        options.excludeFiles = opt.substring("excludeFiles:".length).split(",").filter(_.length > 0).map(_.r)
       } else {
         error("Unknown option: " + opt)
       }
     }
   }
   override val optionsHelp: Option[String] = Some(
-    "  -P:scct:projectId:<name>          identify compiled classes under project <name>\n" +
-      "  -P:scct:basedir:<dir>             set the root dir of the project being compiled"
+    "  -P:scct:projectId:<name>                 identify compiled classes under project <name>\n" +
+      "  -P:scct:basedir:<dir>                    set the root dir of the project being compiled\n"
   )
 }
 
-class ScctInstrumentPluginOptions(val compilationId: String, var projectId: String, var baseDir: File) {
+class ScctInstrumentPluginOptions(
+    val compilationId: String,
+    var projectId: String,
+    var baseDir: File,
+    var excludeClasses: Array[Regex] = Array(),
+    var excludeFiles: Array[Regex] = Array()) {
   def this() = this(System.currentTimeMillis.toString + Random.nextLong().toString, ScctInstrumentPluginOptions.defaultProjectName, ScctInstrumentPluginOptions.defaultBasedir)
 }
 
@@ -45,7 +55,6 @@ object ScctInstrumentPluginOptions {
 
 class ScctTransformComponent(val global: Global, val opts: ScctInstrumentPluginOptions) extends PluginComponent with TypingTransformers with Transform {
   import global._
-  import global.definitions._
 
   val runsAfter = List[String]("typer")
   override val runsBefore = List[String]("patmat")
@@ -70,11 +79,14 @@ class ScctTransformComponent(val global: Global, val opts: ScctInstrumentPluginO
       super.run
       saveMetadata
     }
+
     private def saveMetadata {
       if (saveData) {
+        val filtered = CoverageFilter.filter(data, opts.excludeFiles.toList, opts.excludeClasses.toList)
+
         println("scct: [" + opts.projectId + "] Saving coverage data.")
         if (coverageFile.exists) coverageFile.delete
-        MetadataPickler.toFile(data, coverageFile)
+        MetadataPickler.toFile(filtered, coverageFile)
       }
     }
   }
@@ -95,7 +107,7 @@ class ScctTransformComponent(val global: Global, val opts: ScctInstrumentPluginO
     private def hasSkipAnnotation(t: Tree) = t.hasSymbol && t.symbol.hasAnnotation(definitions.getClass("com.sqality.scct.uncovered"))
     private def isSynthetic(t: Tree) = t.hasSymbol && t.symbol.isSynthetic && !t.symbol.isAnonymousFunction
     private def isObjectOrTraitConstructor(s: Symbol) = s.isConstructor && (currentClass.isModuleClass || currentClass.isTrait)
-    private def isGeneratedMethod(t: DefDef) = !t.symbol.isConstructor && t.pos.point == currentClass.pos.point
+    private def isGeneratedMethod(t: DefDef) = !t.symbol.isConstructor && currentClass.pos != NoPosition && t.pos.point == currentClass.pos.point
     private def isAbstractMethod(t: DefDef) = t.symbol.isDeferred
     private def isNonLazyStableMethodOrAccessor(t: DefDef) = !t.symbol.isLazy && (t.symbol.isStable || t.symbol.hasFlag(Flags.ACCESSOR))
     private def isInAnonymousClass = currentClass.isAnonymousClass
@@ -235,9 +247,9 @@ class ScctTransformComponent(val global: Global, val opts: ScctInstrumentPluginO
   }
 
   private def createName(owner: Symbol, tree: Tree) = {
-    val src = tree.pos.source.file match {
-      case null => "<no file>"
-      case f => IO.relativePath(f.file, opts.baseDir)
+    val src = tree.pos match {
+      case pos if pos.isDefined && pos.source.file.exists => IO.relativePath(pos.source.file.file, opts.baseDir)
+      case _ => "<no file>"
     }
     Name(src, classType(owner), packageName(tree, owner), className(tree, owner), opts.projectId)
   }

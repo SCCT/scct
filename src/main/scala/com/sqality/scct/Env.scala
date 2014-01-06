@@ -2,6 +2,7 @@ package com.sqality.scct
 
 import java.io.File
 import java.util.Properties
+import scala.util.matching.Regex
 
 object Env {
   def sysOption(s: String) = {
@@ -40,16 +41,26 @@ object Env {
 
 class Env {
   val props = Env.envProps("/scct.properties")
-  def prop(x: String) = props.getProperty(x)
+  def prop(x: String): String = props.getProperty(x)
 
   lazy val projectId = prop("scct.project.name")
   lazy val baseDir = new File(prop("scct.basedir"))
   lazy val reportHook = prop("scct.report.hook")
   lazy val reportDir = new File(prop("scct.report.dir"))
 
-  /** Where the source files actually start from, so e.g. $PROJECTHOME/src/main/scala/ */
+  /** Where the source files actually start from, so e.g. PROJECTHOME/src/main/scala/ */
   lazy val sourceDir = new File(prop("scct.source.dir"))
 
+  lazy val excludeFiles = parseRegexArray(prop("scct.excluded.paths.regex"))
+  lazy val excludeClasses = parseRegexArray(prop("scct.excluded.classes.regex"))
+
   def coverageFile = Env.sysOption("scct.coverage.file").map(new File(_)).getOrElse(new File(getClass.getResource("/coverage.data").toURI))
+
+  private def parseRegexArray(commaSepRegexsOption: java.lang.String): List[Regex] = {
+    commaSepRegexsOption match {
+      case commaSepRegexs: String => commaSepRegexs.split(",").filter(_.length > 0).map(_.r).toList
+      case _ => List.empty
+    }
+  }
 }
 

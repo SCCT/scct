@@ -18,7 +18,7 @@ libraryDependencies ++= Seq(
   "org.specs2"  %% "specs2"      % "1.12.4.1"  % "test"
 )
 
-publishTo <<= version { (v: String) => 
+publishTo <<= version { (v: String) =>
   val nexus = "https://oss.sonatype.org/"
   if (v.trim.endsWith("SNAPSHOT")) Some("snapshots" at nexus + "content/repositories/snapshots")
   else Some("releases" at nexus + "service/local/staging/deploy/maven2")
@@ -63,3 +63,5 @@ scalariformSettings
 seq(ScctBuild.instrumentSettings : _*)
 
 seq(com.github.theon.coveralls.CoverallsPlugin.coverallsSettings: _*)
+
+credentials += Credentials("Sonatype Nexus Repository Manager", "oss.sonatype.org", System.getenv("SONATYPE_USER"), System.getenv("SONATYPE_PASS"))

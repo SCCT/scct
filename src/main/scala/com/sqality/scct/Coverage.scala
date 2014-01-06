@@ -53,12 +53,17 @@ object Coverage {
   }
 
   def report = {
-    val projectData = new ProjectData(env, dataValues)
+    val filtered: List[CoveredBlock] = filteredData
+
+    val projectData = new ProjectData(env, filtered)
     val writer = new HtmlReportWriter(env.reportDir)
     new HtmlReporter(projectData, writer).report
     new CoberturaReporter(projectData, writer).report
     BinaryReporter.report(projectData, env.reportDir)
   }
+
+  private def filteredData: List[CoveredBlock] =
+    CoverageFilter.filter(dataValues, env.excludeFiles, env.excludeClasses)
 
   private def setupShutdownHook {
     Runtime.getRuntime.addShutdownHook(new Thread {
