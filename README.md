@@ -18,7 +18,7 @@ discussion on SCCT.
 Install
 -------
 
-### Add the plugin to your build with the following in project/build.sbt:
+### Add the plugin to your build with the following in project/plugins.sbt:
 
     addSbtPlugin("com.sqality.scct" % "sbt-scct" % "0.2.2")
 
