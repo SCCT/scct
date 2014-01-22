@@ -10,15 +10,15 @@ import util.Random
 class ScctInstrumentPlugin(val global: Global) extends Plugin {
   val name = "scct"
   val description = "Scala code coverage instrumentation plugin."
-  val options = new ScctInstrumentPluginOptions()
-  val components = List(new ScctTransformComponent(global, options))
+  val scctOptions = new ScctInstrumentPluginOptions()
+  val components = List(new ScctTransformComponent(global, scctOptions))
 
   override def processOptions(opts: List[String], error: String => Unit) {
     for (opt <- opts) {
       if (opt.startsWith("projectId:")) {
-        options.projectId = opt.substring("projectId:".length)
+        scctOptions.projectId = opt.substring("projectId:".length)
       } else if (opt.startsWith("basedir:")) {
-        options.baseDir = new File(opt.substring("basedir:".length))
+        scctOptions.baseDir = new File(opt.substring("basedir:".length))
       } else {
         error("Unknown option: "+opt)
       }
@@ -92,7 +92,7 @@ class ScctTransformComponent(val global: Global, val opts:ScctInstrumentPluginOp
       if (continue) super.transform(result) else result
     }
 
-    private def hasSkipAnnotation(t: Tree) = t.hasSymbol && t.symbol.hasAnnotation(definitions.getClass(global.stringToTypeName("reaktor.scct.uncovered")))
+    private def hasSkipAnnotation(t: Tree) = t.hasSymbol && t.symbol.hasAnnotation(rootMirror.getClassByName(global.stringToTypeName("reaktor.scct.uncovered")))
     private def isSynthetic(t: Tree) = t.hasSymbol && t.symbol.isSynthetic && !t.symbol.isAnonymousFunction
     private def isObjectOrTraitConstructor(s: Symbol) = s.isConstructor && (currentClass.isModuleClass || currentClass.isTrait)
     private def isGeneratedMethod(t: DefDef) = !t.symbol.isConstructor && t.pos.point == currentClass.pos.point

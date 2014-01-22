@@ -2,24 +2,27 @@ organization := "reaktor"
 
 name := "scct"
 
-version := "0.2-SNAPSHOT-paulp"
+version := "1.0.0-SNAPSHOT"
 
-scalaVersion := "2.10.2"
+scalaVersion := "2.10.3"
 
-crossScalaVersions := Seq("2.10.2", "2.11.0-M4")
+autoScalaLibrary := false
 
-libraryDependencies <+= (scalaVersion) { v =>
-  "org.scala-lang" % "scala-compiler" % v % "provided"
-}
+crossScalaVersions := Seq("2.10.3", "2.11.0-M7")
+
+resolvers += Opts.resolver.sonatypeSnapshots
 
 libraryDependencies ++= Seq(
-  "junit" % "junit" % "4.10" % "test",
-  "org.mockito" % "mockito-all" % "1.9.5-rc1" % "test" withSources,
-  "org.specs2" %% "specs2" % "1.12.3" % "test"
+  "org.scala-lang" %  "scala-compiler" % scalaVersion.value % "provided",
+      "org.specs2" %% "specs2"         % "1.14"             % "test",
+           "junit" %  "junit"          % "4.10"             % "test",
+     "org.mockito" %  "mockito-all"    % "1.9.5"            % "test" withSources
 )
 
-// publishTo := Some(Resolver.file("file",  new File("../gh-pages/maven-repo")))
+testOptions in Test ++= Seq(
+  Tests.Setup(() => System.setProperty("scct-test-scala-version", scalaVersion.value)),
+  Tests.Setup(() => System.setProperty("scct-test-scala-binary-version", scalaBinaryVersion.value))
+)
 
-// resolvers += "scala-tools-releases" at "https://oss.sonatype.org/content/groups/scala-tools/"
-
-testOptions in Test <+= (scalaVersion in Test) map { (scalaVer) => Tests.Setup { () => System.setProperty("scct-test-scala-version", scalaVer) } }
+// lame
+conflictWarning ~= { _.copy(failOnConflict = false) }

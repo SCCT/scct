@@ -26,13 +26,13 @@ class ScctInstrumentPluginSpec extends Specification with Mockito {
 
   "Plugin options" should {
     "have defaults" in {
-      sut.options.projectId must not be empty
-      sut.options.baseDir.getName must not be empty
+      sut.scctOptions.projectId must not be empty
+      sut.scctOptions.baseDir.getName must not be empty
     }
     "be settable" in {
       sut.processOptions(List("basedir:/base/dir", "projectId:myProject"), s => ())
-      sut.options.projectId mustEqual "myProject"
-      sut.options.baseDir.getAbsolutePath mustEqual "/base/dir"
+      sut.scctOptions.projectId mustEqual "myProject"
+      sut.scctOptions.baseDir.getAbsolutePath mustEqual "/base/dir"
     }
     "report error" in {
       var err = ""
