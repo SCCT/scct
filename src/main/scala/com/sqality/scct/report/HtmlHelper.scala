@@ -10,7 +10,7 @@ class HtmlHelper {
   private def toFileName(prefix: String, name: String) =
     prefix + "-" + name.replaceAll("/", "_").replaceAll("<", "_").replaceAll(">", "_") + ".html"
 
-  private def ratioString(ratioDetail: (Int, Int)) = s"(${ratioDetail._1} out of ${ratioDetail._2})"
+  private def ratioString(ratioDetail: (Int, Int)) = "%d out of %d".format(ratioDetail._1, ratioDetail._2)
 
   def table(headerRow: NodeSeq, itemRows: NodeSeq) =
     <table><tbody>{ headerRow }{ itemRows }</tbody></table>
