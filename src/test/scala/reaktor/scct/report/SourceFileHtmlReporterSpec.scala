@@ -1,11 +1,12 @@
 package reaktor.scct.report
 
 import org.specs2.mutable._
+import org.specs2.matcher.XmlMatchers
 import xml.Text
 import reaktor.scct.{ClassTypes, Name, CoveredBlock}
 import java.io.File
 
-class SourceFileHtmlReporterSpec extends Specification {
+class SourceFileHtmlReporterSpec extends Specification with XmlMatchers {
 
   "Single line formatting" should {
     val sut = new SourceFileHtmlReporter("src", new CoverageData(Nil), List())

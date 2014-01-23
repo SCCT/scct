@@ -14,9 +14,12 @@ resolvers += Opts.resolver.sonatypeSnapshots
 
 libraryDependencies ++= Seq(
   "org.scala-lang" %  "scala-compiler" % scalaVersion.value % "provided",
-      "org.specs2" %% "specs2"         % "1.14"             % "test",
-           "junit" %  "junit"          % "4.10"             % "test",
-     "org.mockito" %  "mockito-all"    % "1.9.5"            % "test" withSources
+  "org.specs2"     %% "specs2-core"          % "2.3.7"             % "test",
+  "org.specs2"     %% "specs2-mock"          % "2.3.7"             % "test",
+  "org.specs2"     %% "specs2-matcher-extra" % "2.3.7"             % "test",
+  "org.specs2"     %% "specs2-junit"         % "2.3.7"             % "test",
+  "junit"          %  "junit"                % "4.11"              % "test",
+  "org.mockito"    %  "mockito-core"         % "1.9.5"             % "test"
 )
 
 testOptions in Test ++= Seq(
