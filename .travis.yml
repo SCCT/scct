@@ -1,0 +1,11 @@
+language: scala
+before_script: sbt test:compile
+script: sbt coveralls
+after_script:
+- if [[ $TRAVIS_TEST_RESULT == 0 && "$TRAVIS_BRANCH" == "master" ]]; then sbt "+publish";
+  fi
+scala:
+- 2.10.3
+env:
+  global:
+  - secure: bFayTjVb51z7JDadYON6D/C8rmTCyoNrXaDnoCQtAAHssYBJM89loN7I7lwGRCmYciX2sbaPrzlwCVjHzra9itjGmw0BUIa+43G7BzI9tZXHXldIL1HjzbaRnZRynr7i463LRP2oCXlZu2QrS81jkBrpufsChd05UCcphWgz920=

@@ -1,8 +1,8 @@
-organization := "reaktor"
+organization := "com.sqality.scct"
 
 name := "scct"
 
-version := "1.0.0-SNAPSHOT"
+version := "0.3-SNAPSHOT"
 
 scalaVersion := "2.10.3"
 
@@ -13,13 +13,13 @@ crossScalaVersions := Seq("2.10.3", "2.11.0-M7")
 resolvers += Opts.resolver.sonatypeSnapshots
 
 libraryDependencies ++= Seq(
-  "org.scala-lang" %  "scala-compiler" % scalaVersion.value % "provided",
-  "org.specs2"     %% "specs2-core"          % "2.3.7"             % "test",
-  "org.specs2"     %% "specs2-mock"          % "2.3.7"             % "test",
-  "org.specs2"     %% "specs2-matcher-extra" % "2.3.7"             % "test",
-  "org.specs2"     %% "specs2-junit"         % "2.3.7"             % "test",
-  "junit"          %  "junit"                % "4.11"              % "test",
-  "org.mockito"    %  "mockito-core"         % "1.9.5"             % "test"
+  "org.scala-lang" %  "scala-compiler"       % scalaVersion.value % "provided",
+      "org.specs2" %% "specs2-core"          % "2.3.6"            % "test",
+      "org.specs2" %% "specs2-mock"          % "2.3.6"            % "test",
+      "org.specs2" %% "specs2-matcher-extra" % "2.3.6"            % "test",
+      "org.specs2" %% "specs2-junit"         % "2.3.6"            % "test",
+           "junit" %  "junit"                % "4.11"             % "test",
+     "org.mockito" %  "mockito-core"         % "1.9.5"            % "test"
 )
 
 testOptions in Test ++= Seq(

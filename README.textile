@@ -1,4 +1,0 @@
-h2. Scala Code Coverage Tool - Name Pending
-
-Now sort of working with scala 2.10 and 2.11.
-
