@@ -20,7 +20,7 @@ Install
 
 ### Add the plugin to your build with the following in project/plugins.sbt:
 
-    addSbtPlugin("com.sqality.scct" % "sbt-scct" % "0.2.2")
+    addSbtPlugin("com.sqality.scct" % "sbt-scct" % "0.3")
 
 #### Or you can use the last Snapshot instead
 
