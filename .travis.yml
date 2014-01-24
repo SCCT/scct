@@ -1,6 +1,5 @@
 language: scala
 before_script: sbt test:compile
-
 after_script:
 - if [[ $TRAVIS_TEST_RESULT == 0 && "$TRAVIS_BRANCH" == "master" ]]; then sbt "+publish";
   fi
@@ -8,4 +7,5 @@ scala:
 - 2.10.3
 env:
   global:
-  - secure: bFayTjVb51z7JDadYON6D/C8rmTCyoNrXaDnoCQtAAHssYBJM89loN7I7lwGRCmYciX2sbaPrzlwCVjHzra9itjGmw0BUIa+43G7BzI9tZXHXldIL1HjzbaRnZRynr7i463LRP2oCXlZu2QrS81jkBrpufsChd05UCcphWgz920=
+  - secure: OnUGP63ZuZOMeKPGj4ssRRLWGSKgRYpJFH5SvXuC2zIPRp6SoHI8yEEDVvv9Ee/QmOqFUQ2/ouF5OAdeMsxE/lHo5GzhLC2nhRw2C5hcnoLeqwApZ07Hc2me0gkbm7MkdfXxGurAH5KQjyZIbYjExMY9fJPY8nh3vVKEe1m6P8A=
+  - secure: eAY1cQ39Z7G2CYuBrGVhf7uCwnYZns06V/VfNhBz3EzqgZxEm9AUkNJQuGT/YrIHpIzUDXAYcccVpe/ocnqh5vRwF74faqvfDmMaDa6KbkUAttBxGVyIpHW7U+gcKJzhslx6yyUG0Y5CVFP33CreIgX7X7kv6BCNadDcoIJPI1Q=
