@@ -79,12 +79,17 @@ trait InstrumentationSupport {
   }
 
   def locateScalaJars() = {
+    val scalaJars = List("scala-compiler.jar", "scala-library.jar")
     val userHome = System.getProperty("user.home")
-    val ivyCompilerJar = s"$userHome/.ivy2/cache/org.scala-lang/scala-compiler/jars/scala-compiler-$scalaVersion.jar"
-    val ivyLibraryJar = s"$userHome/.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-$scalaVersion.jar"
-
-    if (new File(ivyCompilerJar).exists && new File(ivyLibraryJar).exists) {
-      List(ivyCompilerJar, ivyLibraryJar)
+    if (new File(System.getProperty("user.home") + "/.sbt/boot/scala-" + scalaVersion + "/lib/" + scalaJars.head).exists) {
+      // sbt 0.11+ with global boot dirs
+      scalaJars.map(userHome + "/.sbt/boot/scala-" + scalaVersion + "/lib/" + _)
+    } else if (new File("./project/boot/scala-" + scalaVersion + "/lib/" + scalaJars.head).exists) {
+      // sbt 0.7.7 and such, project-specific boot dirs
+      scalaJars.map("./project/boot/scala-" + scalaVersion + "/lib/" + _)
+    } else if (new File("./scct/project/boot/scala-" + scalaVersion + "/lib/" + scalaJars.head).exists) {
+      // Probably IDEA with project dir instead of module dir as working dir
+      scalaJars.map("./scct/project/boot/scala-" + scalaVersion + "/lib/" + _)
     } else {
       throw new FileNotFoundException("scala jars not found. Check InstrumentationSpec:locateScalaJars")
     }
