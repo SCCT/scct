@@ -1,6 +1,6 @@
 language: scala
 before_script: sbt test:compile
-script: sbt coveralls
+
 after_script:
 - if [[ $TRAVIS_TEST_RESULT == 0 && "$TRAVIS_BRANCH" == "master" ]]; then sbt "+publish";
   fi
