@@ -25,20 +25,20 @@ class ScctInstrumentPluginSpec extends Specification with Mockito {
 
   "Plugin options" should {
     "have defaults" in {
-      sut.options.projectId must not be empty
-      sut.options.baseDir.getName must not be empty
+      sut.scctOptions.projectId must not be empty
+      sut.scctOptions.baseDir.getName must not be empty
     }
     "be settable" in {
       sut.processOptions(List("basedir:/base/dir", "projectId:myProject", "excludePackages:myRegex,yourRegex",
         "excludeFiles:regex1,regex2,regex3"), s => ())
-      sut.options.projectId mustEqual "myProject"
-      sut.options.baseDir.getAbsolutePath mustEqual "/base/dir"
-      sut.options.excludeClasses must haveClass[Array[scala.util.matching.Regex]]
-      sut.options.excludeClasses(0).toString mustEqual "myRegex"
-      sut.options.excludeClasses(1).toString mustEqual "yourRegex"
-      sut.options.excludeFiles(0).toString mustEqual "regex1"
-      sut.options.excludeFiles(1).toString mustEqual "regex2"
-      sut.options.excludeFiles(2).toString mustEqual "regex3"
+      sut.scctOptions.projectId mustEqual "myProject"
+      sut.scctOptions.baseDir.getAbsolutePath mustEqual "/base/dir"
+      sut.scctOptions.excludeClasses must haveClass[Array[scala.util.matching.Regex]]
+      sut.scctOptions.excludeClasses(0).toString mustEqual "myRegex"
+      sut.scctOptions.excludeClasses(1).toString mustEqual "yourRegex"
+      sut.scctOptions.excludeFiles(0).toString mustEqual "regex1"
+      sut.scctOptions.excludeFiles(1).toString mustEqual "regex2"
+      sut.scctOptions.excludeFiles(2).toString mustEqual "regex3"
     }
     "report error" in {
       var err = ""

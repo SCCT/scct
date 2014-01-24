@@ -11,19 +11,19 @@ import scala.util.matching.Regex
 class ScctInstrumentPlugin(val global: Global) extends Plugin {
   val name = "scct"
   val description = "Scala code coverage instrumentation plugin."
-  val options = new ScctInstrumentPluginOptions()
-  val components = List(new ScctTransformComponent(global, options))
+  val scctOptions = new ScctInstrumentPluginOptions()
+  val components = List(new ScctTransformComponent(global, scctOptions))
 
   override def processOptions(opts: List[String], error: String => Unit) {
     for (opt <- opts) {
       if (opt.startsWith("projectId:")) {
-        options.projectId = opt.substring("projectId:".length)
+        scctOptions.projectId = opt.substring("projectId:".length)
       } else if (opt.startsWith("basedir:")) {
-        options.baseDir = new File(opt.substring("basedir:".length))
+        scctOptions.baseDir = new File(opt.substring("basedir:".length))
       } else if (opt.startsWith("excludePackages:")) {
-        options.excludeClasses = opt.substring("excludePackages:".length).split(",").filter(_.length > 0).map(_.r)
+        scctOptions.excludeClasses = opt.substring("excludePackages:".length).split(",").filter(_.length > 0).map(_.r)
       } else if (opt.startsWith("excludeFiles:")) {
-        options.excludeFiles = opt.substring("excludeFiles:".length).split(",").filter(_.length > 0).map(_.r)
+        scctOptions.excludeFiles = opt.substring("excludeFiles:".length).split(",").filter(_.length > 0).map(_.r)
       } else {
         error("Unknown option: " + opt)
       }

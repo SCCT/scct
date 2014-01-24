@@ -5,8 +5,9 @@ import java.io.File
 import com.sqality.scct.{ IO, ClassTypes, Name, CoveredBlock }
 import xml.XML
 import org.specs2.specification.Scope
+import org.specs2.matcher.{FileMatchers, XmlMatchers}
 
-class CoberturaReporterSpec extends Specification {
+class CoberturaReporterSpec extends Specification with FileMatchers with XmlMatchers {
 
   sequential
 
