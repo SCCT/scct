@@ -22,7 +22,7 @@ class NameParsingInstrumentationSpec extends InstrumentationSpec {
       classesOf("class X") mustEqual List("X")
       classesOf("trait X") mustEqual List("X")
       classesOf("object X") mustEqual List("X")
-      classesOf("case class X") mustEqual List("X")
+      classesOf("case class X()") mustEqual List("X")
     }
     "handle nested classes" in {
       classesOf("class X { class Y }") mustEqual List("X", "X.Y")

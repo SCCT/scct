@@ -30,7 +30,7 @@ class MiscInstrumentationSpec extends InstrumentationSpec {
   }
 
   "weird case class in class offset" in {
-    offsetsMatch("class Foo @{ case class Bar @}") // TODO: how is the offset there?
+    offsetsMatch("class Foo @{ case class Bar @()}") // TODO: how is the offset there?
   }
 
   "some+map" in {

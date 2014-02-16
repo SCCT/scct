@@ -31,7 +31,7 @@ trait InstrumentationSpec extends Specification with InstrumentationSupport {
 }
 
 trait InstrumentationSupport {
-  def scalaVersion       = sys.props.getOrElse("scct-test-scala-version", "2.10.3")
+  def scalaVersion = sys.props.getOrElse("scct-test-scala-version", "2.10.3")
   def scalaBinaryVersion = sys.props.getOrElse("scct-test-scala-binary-version", "2.10")
   def debug = false
 

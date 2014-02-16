@@ -274,9 +274,9 @@ class ScctTransformComponent(val global: Global, val opts: ScctInstrumentPluginO
     case pd: PackageDef => pd.symbol.fullName.toString
     case _ => if (owner.isEmptyPackageClass || owner.isEmptyPackage) "<root>"
     else if (owner.isPackage || owner.isPackageClass) owner.fullName.toString
-    else if (owner.toplevelClass == NoSymbol) "<root>"
-    else if (owner.toplevelClass.owner.isEmptyPackageClass) "<root>"
-    else owner.toplevelClass.owner.fullName.toString
+    else if (owner.enclosingTopLevelClass == NoSymbol) "<root>"
+    else if (owner.enclosingTopLevelClass.owner.isEmptyPackageClass) "<root>"
+    else owner.enclosingTopLevelClass.owner.fullName.toString
   }
 
   def classType(s: Symbol) = {
