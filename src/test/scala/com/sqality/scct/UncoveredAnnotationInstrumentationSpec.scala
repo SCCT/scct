@@ -6,7 +6,7 @@ class UncoveredAnnotationInstrumentationSpec extends InstrumentationSpec {
       offsetsMatch("""\@com.sqality.scct.uncovered class Foo { println("yeah"); def x = 12; }""")
     }
     "work for method" in {
-      classOffsetsMatch("""\@com.sqality.scct.uncovered def method { println("yeah"); 123 } """)
+      classOffsetsMatch("""\@com.sqality.scct.uncovered def method { println("yeah"); println(123) } """)
     }
   }
 }

@@ -13,7 +13,7 @@ class StatementInstrumentationSpec extends InstrumentationSpec {
     "basic if's" in {
       classOffsetsMatch("if (@x > 2) @println(x.toString)")
       classOffsetsMatch("if (@x > 2) @println(x.toString) else @println(x.toString)")
-      classOffsetsMatch("if (@x > 2) { @999; @println(x.toString) } else { @888; @println(x.toString) }")
+      classOffsetsMatch("if (@x > 2) { @println(999); @println(x.toString) } else { @println(888); @println(x.toString) }")
     }
     "conditional if necessary" in {
       classOffsetsMatch("if (@Some(x).map(@_*10).map(@_ > 20).getOrElse(false)) @println(x.toString)")
@@ -141,7 +141,7 @@ class StatementInstrumentationSpec extends InstrumentationSpec {
     "compile jestan's case: case class constructor in package object called from separate package" in {
       offsetsMatch(
         """|package foo {
-           |  package object common {
+           |  package common {
            |    case class Person@()
            |  }
            |}

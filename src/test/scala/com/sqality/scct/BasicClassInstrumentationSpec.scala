@@ -3,8 +3,8 @@ package com.sqality.scct
 class BasicClassInstrumentationSpec extends InstrumentationSpec {
   "Basic template instrumentation" should {
     "basic class" in {
-      offsetsMatch("class Foo@ ")
-      offsetsMatch("class Foo @{}")
+      offsetsMatch("class Foo@() ")
+      offsetsMatch("class Foo @() {}")
       offsetsMatch("class Foo@(x: Int) {}")
       offsetsMatch("class Foo@(val x: Int) {}")
       offsetsMatch("class Foo@(var x: Int) {}")
@@ -15,11 +15,11 @@ class BasicClassInstrumentationSpec extends InstrumentationSpec {
       offsetsMatch("sealed class Foo@(val x: Int) {}")
     }
     "basic case class" in {
-      offsetsMatch("case class Foo @{}")
+      offsetsMatch("case class Foo @() {}")
       offsetsMatch("case class Foo@(x: Int) {}")
     }
     "sealed case class" in {
-      offsetsMatch("sealed case class Foo @{}")
+      offsetsMatch("sealed case class Foo @() {}")
       offsetsMatch("sealed case class Foo@(x: Int) {}")
     }
     "basic object" in {
@@ -61,7 +61,7 @@ class BasicClassInstrumentationSpec extends InstrumentationSpec {
       classOffsetsMatch("val z = @12;")
       classOffsetsMatch("var z = @12;")
       classOffsetsMatch("def z = @12;")
-      classOffsetsMatch("def z { @12 }")
+      classOffsetsMatch("def z { @??? }")
     }
 
     "unbound var declarations" in {
@@ -95,10 +95,10 @@ class BasicClassInstrumentationSpec extends InstrumentationSpec {
       classOffsetsMatch("val foo = @System.currentTimeMillis")
     }
     "unit method bodys" in {
-      classOffsetsMatch("def foo { @12; @hashCode; @System.currentTimeMillis }")
+      classOffsetsMatch("def foo { @???; @println(hashCode); @System.currentTimeMillis }")
     }
     "nested blocks" in {
-      classOffsetsMatch("def z = { @1; { @2; @3; { @4; @5; }; @6; }; @7 }")
+      classOffsetsMatch("def f(x: Int) = () ; def z = { @f(1); { @f(2); @f(3); { @f(4); @f(5); }; @f(6); }; @f(7) }")
     }
     "body content" in {
       offsetsMatch("""|class Foo@(x: Boolean) {
@@ -120,15 +120,15 @@ class BasicClassInstrumentationSpec extends InstrumentationSpec {
 
   "Case class instrumentation" should {
     "overriden generated methods" in {
-      offsetsMatch("case class Foo @{ override def hashCode = @999 }")
+      offsetsMatch("case class Foo @() { override def hashCode = @999 }")
     }
   }
 
   "asInstanceOf" should {
     "normally" in {
-      classOffsetsMatch("""val foo = @"x".asInstanceOf[scala.xml.Node]""")
-      classOffsetsMatch("""def foo = @"x".asInstanceOf[scala.xml.Node]""")
-      classOffsetsMatch("""def foo = { @println(x.toString); @"x".asInstanceOf[scala.xml.Node] }""")
+      classOffsetsMatch("""val foo = @"x".asInstanceOf[scala.util.Random]""")
+      classOffsetsMatch("""def foo = @"x".asInstanceOf[scala.util.Random]""")
+      classOffsetsMatch("""def foo = { @println(x.toString); @"x".asInstanceOf[scala.util.Random] }""")
     }
   }
 
@@ -144,7 +144,7 @@ class BasicClassInstrumentationSpec extends InstrumentationSpec {
       classOffsetsMatch("class Bar@(z: Int) {}")
     }
     "instrument nested case class" in {
-      offsetsMatch("class Foo @{ case class Bar @}") // TODO: how is the offset there?
+      offsetsMatch("class Foo @{ case class Bar @() }") // TODO: how is the offset there?
       classOffsetsMatch("case class Bar@(z: Int) {}")
     }
     "not instrument nested object" in {
