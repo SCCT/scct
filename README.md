@@ -14,6 +14,7 @@ discussion on SCCT.
 ### Scala versions
 
 0.3.0 is built against Scala 2.10, 2.11
+
 0.2.2 is built against Scala 2.9.2
 
 Install
