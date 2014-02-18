@@ -13,7 +13,8 @@ discussion on SCCT.
 
 ### Scala versions
 
-2.10.x, 2.9.3, 2.9.2 and 2.9.1.
+0.3.0 is built against Scala 2.10, 2.11
+0.2.2 is built against Scala 2.9.2
 
 Install
 -------
