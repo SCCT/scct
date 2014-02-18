@@ -37,7 +37,7 @@ Install
 
 Then open:
 
-    ./target/scala_2.10/coverage-report/index.html
+    ./target/scala-2.10/coverage-report/index.html
 
 ### Multiproject builds
 
