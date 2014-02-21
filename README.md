@@ -1,3 +1,7 @@
+### A new fork of SCCT has been released as [Scoverage](https://github.com/scoverage/scalac-scoverage-plugin)
+
+- Scoverage provides statement level coverage whereas SCCT provides line level coverage
+
 Scala Code Coverage Tool [![Build Status](https://travis-ci.org/sqality/scct.png?branch=master)](https://travis-ci.org/sqality/scct) [![Coverage Status](https://coveralls.io/repos/SCCT/scct/badge.png?branch=master)](https://coveralls.io/r/SCCT/scct?branch=master)
 =====================================================================================================================================================================================================================================
 
