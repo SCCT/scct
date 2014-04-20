@@ -5,7 +5,7 @@ after_script:
   fi
 scala:
 - 2.10.3
-- 2.11.0-M8
+- 2.11.0
 env:
   global:
   - secure: OnUGP63ZuZOMeKPGj4ssRRLWGSKgRYpJFH5SvXuC2zIPRp6SoHI8yEEDVvv9Ee/QmOqFUQ2/ouF5OAdeMsxE/lHo5GzhLC2nhRw2C5hcnoLeqwApZ07Hc2me0gkbm7MkdfXxGurAH5KQjyZIbYjExMY9fJPY8nh3vVKEe1m6P8A=
